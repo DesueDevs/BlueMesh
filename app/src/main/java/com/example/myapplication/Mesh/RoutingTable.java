@@ -49,7 +49,9 @@ public class RoutingTable {
     public void compareAndUpdateTable(RoutingTable other) {
         for (RoutingEntry entry : other.entries) {
             RoutingEntry existingEntry = getRouteShort(entry.destination);
-            if (existingEntry == null) continue;
+            if (existingEntry == null) {
+                addRoute(entry); // add route to user as there are no previous know routes
+            }
             if (entry.jumps.size() < existingEntry.jumps.size()) {
                 // check if this route is better than our existing one, if it is we add it to our table
                 addRoute(entry);
@@ -74,6 +76,7 @@ public class RoutingTable {
         public MeshProfile destination;
         public String nextHop;
         public List<String> jumps; // List of UUIDs representing the path to the destination
+        // don't want to remove records from the jumps list because with prevent proper routing back
         public RoutingEntry(MeshProfile destination, String nextHop, List<String> jumps) {
             this.destination = destination;
             this.nextHop = nextHop;

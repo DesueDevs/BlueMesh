@@ -5,9 +5,12 @@ import java.security.NoSuchAlgorithmException;
 
 public class EncryptionHash {
     public static String hashString(String input) {
+        return hashBytes(input.getBytes());
+    }
+    public static String hashBytes(byte[] bytes){
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(input.getBytes());
+            byte[] hash = digest.digest(bytes);
             return bytesToHex(hash);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("SHA-256 algorithm not found", e);

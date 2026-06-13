@@ -19,7 +19,8 @@ public class EncryptionRSA {
             cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, publicKey);
             return cipher.doFinal(data);
         } catch (Exception e) {
-            throw new RuntimeException("Error encrypting data with RSA", e);
+            System.err.println("Attempted to encrypt data with RSA publi key but had: " + e);
+            return null;
         }
     }
     public static byte[] decryptRSA(byte[] data, java.security.PrivateKey privateKey) {
@@ -28,7 +29,8 @@ public class EncryptionRSA {
             cipher.init(javax.crypto.Cipher.DECRYPT_MODE, privateKey);
             return cipher.doFinal(data);
         } catch (Exception e) {
-            throw new RuntimeException("Error decrypting data with RSA", e);
+            System.err.println("attempted RSA decrypt but data isnt able to decrypted due to: " + e);
+            return null;
         }
     }
 }

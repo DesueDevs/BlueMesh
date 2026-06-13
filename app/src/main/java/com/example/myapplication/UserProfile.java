@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 
 import com.example.myapplication.Mesh.MeshProfile;
+import com.example.myapplication.Utility.EncryptionHash;
 import com.example.myapplication.Utility.EncryptionRSA;
 
 import java.security.CryptoPrimitive;
@@ -14,9 +15,10 @@ import java.util.UUID;
 
 public class UserProfile {
     private static UserProfile INSTANCE = null;
-    private String userID;
-    private PublicKey publicKey;
-    private PrivateKey privateKey;
+    public String userID;
+    public PublicKey publicKey;
+    public PrivateKey privateKey; // should try to make this a protected field in the future
+    public MeshProfile meshProfile;
 
     private UserProfile() {
         // Generate RSA key pair
@@ -24,7 +26,8 @@ public class UserProfile {
             var keyPair = EncryptionRSA.generateRSAKeyPair();
             this.publicKey = keyPair.getPublic();
             this.privateKey = keyPair.getPrivate();
-            this.userID = UUID.randomUUID().toString();
+            this.userID = EncryptionHash.hashBytes(publicKey.getEncoded());
+            this.meshProfile = new MeshProfile(publicKey);
         } catch (Exception e) {
             e.printStackTrace();
         }
